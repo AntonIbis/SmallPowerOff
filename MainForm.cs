@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Media;
 
 namespace SmallWinPowerOff
 {
@@ -14,6 +15,13 @@ namespace SmallWinPowerOff
             Timer1Sec.Start();
             TimePik.Format = DateTimePickerFormat.Time;
             TimePik.ShowUpDown = true;
+
+            this.BackColorChanged += MainForm_BackColorChanged;
+        }
+
+        private void MainForm_BackColorChanged(object sender, EventArgs e)
+        {
+            soundPlayer.Play();
         }
 
         #region Перемещение формы
@@ -25,6 +33,8 @@ namespace SmallWinPowerOff
         #endregion
 
         DateTime TimeOff;
+        SoundPlayer soundPlayer = new SoundPlayer();
+
 
         private void UpPanel_MouseDown(object sender, MouseEventArgs e)
         {
@@ -87,6 +97,7 @@ namespace SmallWinPowerOff
                 TextTimerOff.Text = $"До отключения осталось {ts.Hours} часов {ts.Minutes} минут {ts.Seconds} секунд";
                 if (ts.Hours == 0 & ts.Minutes == 0 & ts.Seconds <= 30)
                 {
+                    SoundPlayer soundPlayer = new SoundPlayer();
                     this.Activate();
                     this.BackColor = Color.Red;
                     this.WindowState = FormWindowState.Normal;
